@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+
+  build:
+    build:
+      context: ./build
+    volumes:
+      - type: bind
+        source: ./webdir
+        target: /tmp/webapps
+
+  prod:
+    build:
+      context: ./prod
+    depends_on:
+      - build
+    image: nickmas/dve-08
+    ports:
+      - "80:8080"
+    environment:
+      VAR_WEBAPPS_DIR: /usr/local/tomcat/webapps
+    volumes:
+      - type: bind
+        source: ./webdir
+        target: /usr/local/tomcat/webapps
+
+# volumes:
+#   webdir:
